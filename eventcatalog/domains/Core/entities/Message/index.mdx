@@ -17,6 +17,13 @@ properties:
     type: string
     required: true
     description: External id coming outside (session id)
+  - name: workspace_id
+    type: string
+    required: true
+    description: Workspace id it comes from
+    references: Workspace
+    relationType: belongsTo
+    referencesIdentifier: id
   - name: violatedPolicies
     type: UUID[]
     required: true

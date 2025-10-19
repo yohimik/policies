@@ -24,7 +24,7 @@ sends:
 
 # Tech stack
 
-1. Database: MongoDB native driver for node js
+1. Database: MongoDB native driver for node js (indexes `db.messages.createIndex({ external_id: 1, workspace_id: 1 })`)
 2. HTTP: fastify
 3. Queues: native google pub sub driver
 4. OpenAPI swagger

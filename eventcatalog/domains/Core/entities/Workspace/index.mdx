@@ -20,4 +20,11 @@ properties:
     references: Policy
     relationType: hasMany
     referencesIdentifier: id
+  - name: messages
+    type: UUID[]
+    required: true
+    description: List of messages of the workspace
+    references: Message
+    relationType: hasMany
+    referencesIdentifier: id
 ---
