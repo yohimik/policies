@@ -1,0 +1,27 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "GetByIDRequest",
+    "type": "object",
+    "properties": {
+      "sessionID": {
+        "type": "string",
+        "description": "ID of the session (external id)"
+      },
+      "workspaceID": {
+        "type": "string",
+        "description": "ID the workspace (external id)"
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Maximum amount of messages to receive",
+        "default": 0
+      },
+      "skip": {
+        "type": "integer",
+        "description": "Messages to skip for pagination",
+        "default": 0
+      }
+    },
+    "required": ["sessionID", "workspaceID"],
+    "additionalProperties": false
+  }

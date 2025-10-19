@@ -1,0 +1,27 @@
+---
+id: Message
+name: Message
+version: 0.0.1
+identifier: id
+summary: Represents a message
+properties:
+  - name: id
+    type: UUID
+    required: true
+    description: Unique identifier for the policy
+  - name: content
+    type: string
+    required: true
+    description: Content of the message
+  - name: external_id
+    type: string
+    required: true
+    description: External id coming outside (session id)
+  - name: violatedPolicies
+    type: UUID[]
+    required: true
+    description: Policies violated by message
+    references: Policy
+    relationType: hasMany
+    referencesIdentifier: id
+---

@@ -1,0 +1,104 @@
+---
+id: "CheckFlow"
+name: "Check message flow"
+version: "0.0.1"
+summary: "Flow for when a external user sends a message to check"
+steps:
+  - id: "check_initiated"
+    title: "Check message"
+    summary: "External user"
+    # define the actor for, in this case it's a user.
+    actor:
+      name: "User"
+    # What happens next? Define the next step
+    next_step:
+      id: "check_request"
+      label: "User sends request"
+
+  - id: "check_request"
+    title: "Cancel Subscription"
+    # This step is a message, include the message and version
+    message:
+      id: "CheckExternal"
+      version: "0.0.1"
+    next_step:
+      id: "check_accept"
+      label: "CRUD service accepts request and retrieves needed information"
+
+  - id: "check_accept"
+    title: "CRUD service accepts request and retrieves needed information"
+    # This is an external system (e.g Stripe)
+    service:
+      id: "CRUD"
+      version: 0.0.1
+    next_steps:
+      - id: "check_not_found"
+        label: "Workspace not found"
+      - id: "check_ml_message"
+        label: "Workspace found, send ml check message"
+
+  - id: "check_not_found"
+    title: "Send workspace not found response"
+
+  - id: "check_ml_message"
+    title: "Notifications Service"
+    message:
+      id: "Check"
+      version: "0.0.1"
+    next_step:
+      id: "check_ml_in_progress"
+      label: "Service accepts command"
+
+  - id: "check_ml_in_progress"
+    title: "ML Service"
+    # This node is a service, include that.
+    service:
+      id: "MLService"
+      version: "0.0.1"
+    next_step:
+      id: "check_ml_message_response"
+      label: "After ML operation it send response"
+
+  - id: "check_ml_message_response"
+    title: "Notifications Service"
+    message:
+      id: "CheckResponse"
+      version: "0.0.1"
+    next_step:
+      id: "check_save"
+      label: "Service accepts command"
+
+  - id: "check_save"
+    title: "CRUD service accepts response event and saves all information into database, retrieves full information from LRU cache"
+    # This is an external system (e.g Stripe)
+    service:
+      id: "CRUD"
+      version: 0.0.1
+    next_step:
+      id: "check_finish"
+      label: "Service accepts command, saves message with violated policies, and send response"
+
+  - id: "check_finish"
+    title: "User accepts response"
+    summary: "External user"
+    # define the actor for, in this case it's a user.
+    actor:
+      name: "User"
+
+---
+
+# Key concepts
+
+1. We keep incoming `Check` command request open till we receive `CheckResponse`
+2. Messages are not saved before we get a `CheckResponse`
+3. We use queues and separate ML service for higher throughput
+4. We use LRU cache to retrieve full history, we dont invalidate it, we update it manually when new message is saved
+5. Messages are saved into hard drive queue, so in case of error or server restart they wont be lost
+6. We use queue level batching
+
+# Trade offers
+
+1. We need higher RAM for storing all cache
+2. We can observe 1-2 seconds delay for real time data and http response
+3. Due to cache, we potentially we need to locks to keep cache consistent, add batching for before sending for queue and save them as batch
+4. We keep http request open to send response, but we need anyway (not much a trade offer)

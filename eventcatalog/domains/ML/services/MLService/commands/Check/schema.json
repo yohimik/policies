@@ -1,0 +1,46 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "CommandCheck",
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "The unique identifier for check request"
+      },
+      "sessionID": {
+        "type": "string",
+        "description": "Session id message belongs"
+      },
+      "workspaceID": {
+        "type": "string",
+        "description": "ID of the workspace (external id)"
+      },
+      "message": {
+        "type": "string",
+        "description": "Incoming message for check"
+      },
+      "policies": {
+        "type": "array",
+        "description": "Policies to check",
+        "items": {
+          "type": "object",
+          "required": ["id", "description", "name"],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "minLength": 1
+        }
+      }
+    },
+    "required": ["id", "message", "policies", "sessionID"],
+    "additionalProperties": false
+  }

@@ -1,0 +1,23 @@
+---
+id: CRUD
+version: 0.0.1
+name: CRUD Service
+summary: |
+  Main service that handles CRUD operations
+writesTo:
+    - id: core-db
+      version: 0.0.1
+    - id: cache-db
+      version: 0.0.1
+readsFrom:
+    - id: core-db
+      version: 1.0.1
+    - id: cache-db
+      version: 1.0.1
+receives:
+  - id: CheckResponse
+  - id: GetByID
+  - id: CheckExternal
+sends:
+  - id: Check
+---

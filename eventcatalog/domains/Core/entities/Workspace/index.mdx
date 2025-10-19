@@ -1,0 +1,23 @@
+---
+id: Workspace
+name: Workspace
+version: 0.0.1
+identifier: id
+summary: Represents an workspace (group of sessions and policies).
+properties:
+  - name: id
+    type: UUID
+    required: true
+    description: Unique identifier for the workspace
+  - name: name
+    type: string
+    required: true
+    description: Product SKU at time of adding to cart
+  - name: policies
+    type: UUID[]
+    required: true
+    description: List of policies of the workspace
+    references: Policy
+    relationType: hasMany
+    referencesIdentifier: id
+---

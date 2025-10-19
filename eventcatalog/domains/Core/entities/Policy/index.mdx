@@ -1,0 +1,27 @@
+---
+id: Policy
+name: Policy
+version: 0.0.1
+identifier: id
+summary: Represents a policy
+properties:
+  - name: id
+    type: UUID
+    required: true
+    description: Unique identifier for the policy
+  - name: name
+    type: string
+    required: true
+    description: Name of the policy
+  - name: description
+    type: string
+    required: true
+    description: Description to check
+  - name: workspace
+    type: UUID
+    required: true
+    description: Description to check
+    references: Workspace
+    relationType: belongsTo
+    referencesIdentifier: id
+---
