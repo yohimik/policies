@@ -21,3 +21,29 @@ receives:
 sends:
   - id: Check
 ---
+
+# Tech stack
+
+1. Database: MongoDB native driver for node js
+2. HTTP: fastify
+3. Queues: native google pub sub driver
+4. OpenAPI swagger
+5. Typescript
+
+# Auth
+
+We will use middlewares in crud service
+
+## External messages
+
+Add support for generating bearer token attached in the headers
+
+## Dashboard/admin
+
+Recommended separate auth service (auth gateway), adds user id or external id to the headers or doesnt forward request in case of invalid credentials
+
+JWT tokens (access, refresh)
+
+For login recommended OAUth2 integrated with google or other third parties (no need to save passwords).
+
+If OAuth is not an option then use jwt tokens from auth service
