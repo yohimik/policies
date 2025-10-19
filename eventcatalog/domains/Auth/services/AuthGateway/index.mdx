@@ -1,0 +1,26 @@
+---
+id: AuthGateway
+version: 0.0.1
+name: Auth API Gateway
+summary: |
+  Main service that auth
+writesTo:
+    - id: auth-db
+      version: 0.0.1
+readsFrom:
+    - id: auth-db
+      version: 1.0.1
+receives:
+  - id: GetByID
+  - id: CheckExternal
+sends:
+  - id: GetByIDAuth
+  - id: CheckExternalAuth
+---
+
+# Tech stack
+
+1. Database: Postgres native driver for node js
+2. HTTP: fastify
+4. OpenAPI swagger
+5. Typescript

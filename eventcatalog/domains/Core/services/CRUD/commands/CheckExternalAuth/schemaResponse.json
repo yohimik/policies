@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CommandCheckExternalResponse",
+  "type": "object",
+  "properties": {
+    "sessionID": {
+      "type": "string",
+      "description": "ID of the session (external id)"
+    },
+    "workspaceID": {
+      "type": "string",
+      "description": "ID the workspace (external id)"
+    },
+    "messages": {
+      "type": "array",
+      "description": "Messages saved in the session",
+      "items": {
+        "type": "object",
+        "required": ["id", "content", "policies"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "policies": {
+            "type": "array",
+            "description": "Policies violated by the message",
+            "items": {
+              "type": "object",
+              "required": ["id", "description", "name"],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "minLength": 1
+    }
+  },
+  "required": ["sessionID", "workspaceID"],
+  "additionalProperties": false
+}

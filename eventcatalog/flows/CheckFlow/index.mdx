@@ -23,22 +23,31 @@ steps:
       version: "0.0.1"
     next_step:
       id: "check_accept"
-      label: "CRUD service accepts request and retrieves needed information (or use auth gateway to get needed information from headers)"
+      label: "Auth Gateway service accepts request and retrieves needed information"
 
   - id: "check_accept"
-    title: "CRUD service accepts request and retrieves needed information"
+    title: "Auth Gateway service accepts request and retrieves needed information"
     # This is an external system (e.g Stripe)
     service:
-      id: "CRUD"
+      id: "AuthGateway"
       version: 0.0.1
     next_steps:
       - id: "check_not_found"
         label: "Workspace not found"
-      - id: "check_ml_message"
-        label: "Workspace found, send ml check message"
+      - id: "check_crud_message"
+        label: "Workspace found, forward request with needed to the crud service"
 
   - id: "check_not_found"
     title: "Send workspace not found response"
+
+  - id: "check_crud_message"
+    title: "Notifications Service"
+    service:
+      id: "CRUD"
+      version: 0.0.1
+    next_step:
+      id: "check_ml_message"
+      label: "Service waits for batch (10-20ms), and then sends check command"
 
   - id: "check_ml_message"
     title: "Notifications Service"
@@ -47,7 +56,7 @@ steps:
       version: "0.0.1"
     next_step:
       id: "check_ml_in_progress"
-      label: "Service accepts command"
+      label: "Service sends batched check command"
 
   - id: "check_ml_in_progress"
     title: "ML Service"
@@ -93,8 +102,9 @@ steps:
 2. Messages are not saved before we get a `CheckResponse`
 3. We use queues and separate ML service for higher throughput
 4. We use LRU cache to retrieve full history, we dont invalidate it, we update it manually when new message is saved
-5. Messages are saved into hard drive queue, so in case of error or server restart they wont be lost
+5. Messages are saved into hard drive queue, so in case of server crash or restart they wont be lost
 6. We use queue level batching
+7. Graceful shutdown
 
 # Trade offers
 
@@ -102,3 +112,4 @@ steps:
 2. We can observe 1-2 seconds delay for real time data and http response
 3. Due to cache, we potentially need to locks to keep cache consistent, add batching for before sending for queue and save them as batch
 4. We keep http request open to send response, but we need anyway (not much a trade offer)
+5. Due to batching timeout we can loose some messages before they were published into the queue, use without batching
